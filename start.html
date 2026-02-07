@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>AutoHeroQuest</title>
+<link rel="stylesheet" th:href="@{/css/start.css}">
+</head>
+<body>
+<h1>AutoHeroQuest</h1>
+<p>Enterキーで冒険開始！</p>
+
+<form id="startForm" action="/game/start" method="post">
+    <button type="submit">冒険開始</button>
+</form>
+
+<script>
+  document.addEventListener("keydown", function(e) {
+    if(e.key === "Enter") {
+      document.getElementById("startForm").submit();
+    }
+  });
+</script>
+</body>
+</html>
