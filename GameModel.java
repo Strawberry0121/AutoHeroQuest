@@ -1,46 +1,53 @@
-package model;
+package com.example.model;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameModel {
-    private int score;
-    private int heroLP;
-    private int allyCount;
-    private int allyLP;
-
-    public GameModel() {
-        score = 0;
-        heroLP = 100;
-        allyCount = 0;
-        allyLP = 0;
-    }
-
-    public int getScore() { return score; }
-    public void addScore(int value) { score += value; }
+    private int heroLP = 100;
+    private int score = 0;
+    private int allyCount = 0;
+    private List<EventResult> history = new ArrayList<>();
 
     public int getHeroLP() { return heroLP; }
-    public void damageHero(int dmg) {
-        heroLP -= dmg;
-        if (heroLP < 0) heroLP = 0;
-    }
-    public void healHero(int heal) { heroLP += heal; }
-
+    public int getScore() { return score; }
     public int getAllyCount() { return allyCount; }
-    public int getAllyLP() { return allyLP; }
-    public void addAlly() { 
-        allyCount++; 
-        allyLP += 50; 
-    }
-    public void damageAlly(int dmg) {
-        allyLP -= dmg;
-        if (allyLP < 0) allyLP = 0;
-    }
-    public void healAlly(int heal) { allyLP += heal; }
+    public List<EventResult> getHistory() { return history; }
 
-    // 戦闘処理
-    public void battle(int enemyDamage, int scoreGain) {
-        int heroDmg = enemyDamage;
-        if (allyCount > 0) heroDmg = Math.max(0, enemyDamage - allyCount*2);
-        damageHero(heroDmg);
-        damageAlly(Math.max(0, enemyDamage - heroDmg));
-        addScore(scoreGain + allyCount*2);
+    public void addScore(int s) { score += s; }
+    public void addAlly() { allyCount++; }
+    public void changeHeroLP(int delta) { 
+        heroLP += delta; 
+        if(heroLP < 0) heroLP = 0; 
+    }
+
+    // 履歴追加
+    public void addEventResult(Event e, int hpChange) {
+        history.add(new EventResult(
+            e.getName(),
+            e.getRandomAction(),
+            hpChange,
+            heroLP
+        ));
+    }
+
+    // 冒険履歴用クラス
+    public static class EventResult {
+        private String name;
+        private String action;
+        private int hpChange;
+        private int currentHP;
+
+        public EventResult(String name, String action, int hpChange, int currentHP) {
+            this.name = name;
+            this.action = action;
+            this.hpChange = hpChange;
+            this.currentHP = currentHP;
+        }
+
+        public String getName() { return name; }
+        public String getAction() { return action; }
+        public int getHpChange() { return hpChange; }
+        public int getCurrentHP() { return currentHP; }
     }
 }
