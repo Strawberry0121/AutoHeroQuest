@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>冒険結果</title>
+    <link rel="stylesheet" th:href="@{/css/result.css}">
+</head>
+
+<body>
+    <h1>冒険の結果</h1>
+
+    <div>現在のHP: <span id="heroHP" th:text="${history[0]?.currentHP}">100</span></div>
+    <div id="log"></div>
+    <div id="finalMessage"></div>
+
+    <div id="fireworks"></div>
+
+    <script th:inline="javascript">
+    /*<![CDATA[*/
+    let history = /*[[${history}]]*/ [];
+    let message = /*[[${message}]]*/ 'ゲーム終了';
+    let finalScore = /*[[${finalScore}]]*/ 0;
+
+    const logDiv = document.getElementById("log");
+    const heroHPSpan = document.getElementById("heroHP");
+    const finalMessageDiv = document.getElementById("finalMessage");
+
+    function appendEvent(event) {
+        const div = document.createElement("div");
+        div.className = "event";
+        div.textContent = event.name + " -> " + event.action + " (HP変化: " + event.hpChange + ", 現在HP: " + event.currentHP + ")";
+        logDiv.appendChild(div);
+        logDiv.scrollTop = logDiv.scrollHeight; // 自動スクロール
+        heroHPSpan.textContent = event.currentHP; // HP更新
+    }
+
+	function launchFireworks() {
+	    const fireworksContainer = document.getElementById("fireworks");
+	    for (let i = 0; i < 20; i++) {
+	        const firework = document.createElement("div");
+	        firework.className = "firework";
+
+	        const x = Math.random() * window.innerWidth;
+	        const y = Math.random() * window.innerHeight;
+	        firework.style.left = x + "px";
+	        firework.style.top = y + "px";
+
+	        const dx = (Math.random() * 100 - 50); // 単位は CSS 側で付ける
+	        const dy = (Math.random() * 100 - 50);
+	        firework.style.setProperty("--x", dx + "px");
+	        firework.style.setProperty("--y", dy + "px");
+
+	        fireworksContainer.appendChild(firework);
+
+	        // アニメーション完了後に削除
+	        firework.addEventListener("animationend", () => {
+	            firework.remove();
+	        });
+	    }
+	}
+    let index = 0;
+    function showNext() {
+        if (index < history.length) {
+            appendEvent(history[index]);
+            index++;
+            setTimeout(showNext, 1000); // 1秒ごとに次を表示
+        } else {
+            finalMessageDiv.textContent = message + " 最終スコア: " + finalScore;
+            finalMessageDiv.classList.add("bounce");
+
+            // ゲームクリアなら花火
+            if (message.includes("伝説の勇者")) {
+                launchFireworks();
+            }
+        }
+    }
+
+    // ← これを忘れずに呼ぶ
+    if (history.length > 0) {
+        showNext();
+    } else {
+        finalMessageDiv.textContent = "冒険はまだ始まっていません。";
+    }
+    /*]]>*/
+    </script>
+</body>
+
+</html>
