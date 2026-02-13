@@ -47,7 +47,7 @@ public class GameController {
         GameModel game = new GameModel();
         int step = 0;
 
-        while(game.getHeroLP() > 0 && step < 1) {
+        while(game.getHeroLP() > 0 && step < 50) {
             List<Event> candidates = new ArrayList<>(events);
             GameModel.EventResult lastEventResult = game.getHistory().isEmpty() ? null :
                     game.getHistory().get(game.getHistory().size() - 1);
