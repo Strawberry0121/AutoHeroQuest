@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>AutoHeroQuest</title></head>
+<body>
+<h2>分岐 [[${step}]]</h2>
+<p>イベント: [[${event.name}]]</p>
+<p>演出: [[${event.randomAction}]]</p>
+<p>スコア: [[${score}]], HP: [[${heroLP}]], 仲間数: [[${allyCount}]]</p>
+<form action="/game/next" method="get">
+    <button type="submit">次へ進む</button>
+</form>
+</body>
+</html>

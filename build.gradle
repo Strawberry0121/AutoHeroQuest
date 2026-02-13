@@ -34,4 +34,8 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> f678c1a (Initial commit with src and gradle folders)
